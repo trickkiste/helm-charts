@@ -19,12 +19,12 @@ image:
 service:
   main:
     ports:
-      - name: websockets
+      websockets:
         enabled: true
         port: 9001
         host: 0.0.0.0
         protocol: websockets
-      - name: mqtt
+      mqtt:
         enabled: true
         port: 1883
         host: 0.0.0.0
@@ -54,8 +54,9 @@ data:
     include_dir {{ .Values.persistence.configinc.mountPath }}
     {{- end }}
     {{- range $key, $value := .Values.service.main.ports }}
-    listener {{ $value.host }} {{ $value.port }}
-    protocol {{ $value.protocol }}
+    {{- $key }}: {{ $value }}
+    #listener {{ $value.host }} {{ $value.port }}
+    #protocol {{ $value.protocol }}
     {{- end }}
     {{- end }}
 
