@@ -19,12 +19,12 @@ image:
 service:
   main:
     ports:
-      websockets:
+      - name: websockets
         enabled: true
         port: 9001
         host: 0.0.0.0
         protocol: websockets
-      mqtt:
+      - name: mqtt
         enabled: true
         port: 1883
         host: 0.0.0.0
