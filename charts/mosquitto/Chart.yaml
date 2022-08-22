@@ -8,11 +8,11 @@ keywords:
   - mosquitto
   - MQTT
   - eclipse-iot
-home: https://github.com/trickkiste/helm-charts/tree/master/charts/stable/mosquitto
+home: https://github.com/trickkiste/helm-charts/tree/main/charts/mosquitto
 icon: https://raw.githubusercontent.com/eclipse/mosquitto/master/logo/mosquitto-logo-min.svg
 sources:
   - https://github.com/eclipse/mosquitto
-  - https://github.com/trickkiste/helm-charts
+  - https://github.com/trickkiste/helm-charts/tree/main/chart/mosquitto
 maintainers:
   - name: Markus Kienast
     email: mark@trickkiste.at
