@@ -4,6 +4,36 @@ entries:
   - annotations:
       artifacthub.io/changes: |-
         - kind: changed
+          description: values.yaml "-" array notation
+    apiVersion: v2
+    appVersion: 2.0.14
+    created: "2022-08-22T21:27:45.353140796Z"
+    dependencies:
+    - name: common
+      repository: https://library-charts.k8s-at-home.com
+      version: 4.5.2
+    description: Eclipse Mosquitto - An open source MQTT broker
+    digest: 468ad5e4bcd4feaf1c82d76f6afb55ed236ef3eb4838658ad660539d70d0350e
+    home: https://github.com/trickkiste/helm-charts/tree/main/charts/mosquitto
+    icon: https://raw.githubusercontent.com/eclipse/mosquitto/master/logo/mosquitto-logo-min.svg
+    keywords:
+    - mosquitto
+    - MQTT
+    - eclipse-iot
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: mark@trickkiste.at
+      name: Markus Kienast
+    name: mosquitto
+    sources:
+    - https://github.com/eclipse/mosquitto
+    - https://github.com/trickkiste/helm-charts/tree/main/chart/mosquitto
+    urls:
+    - https://github.com/trickkiste/helm-charts/releases/download/mosquitto-1.0.3/mosquitto-1.0.3.tgz
+    version: 1.0.3
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
           description: values.yaml
     apiVersion: v2
     appVersion: 2.0.14
