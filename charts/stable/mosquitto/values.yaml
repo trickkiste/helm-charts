@@ -19,11 +19,16 @@ image:
 service:
   main:
     ports:
-      http:
-        enabled: false
+      websockets:
+        enabled: true
+        port: 9001
+        host: 0.0.0.0
+        protocol: websockets
       mqtt:
         enabled: true
         port: 1883
+        host: 0.0.0.0
+        protocol: mqtt
 
 auth:
   # -- By enabling this, `allow_anonymous` gets set to `false` in the mosquitto config.
@@ -32,9 +37,30 @@ auth:
 # -- By enabling this, authentication and access control settings will be controlled on a per-listener basis
 perListenerSettings: false
 
-# -- When enabled, this adds the `listener` option to the mosquitto config.
-# Change this to false when using TLS.
-addListener: true
+data:
+  mosquitto.conf: |
+    per_listener_settings {{ .Values.perListenerSettings }}
+    {{- if .Values.auth.enabled }}
+    allow_anonymous false
+    {{- else }}
+    allow_anonymous true
+    {{- end }}
+    {{- if .Values.persistence.data.enabled }}
+    persistence true
+    persistence_location {{ .Values.persistence.data.mountPath }}
+    autosave_interval 1800
+    {{- end }}
+    {{- if .Values.persistence.configinc.enabled }}
+    include_dir {{ .Values.persistence.configinc.mountPath }}
+    {{- end }}
+    {{- range $key, $value := .Values.service.main.ports }}
+    {{- if $value.enabled }}
+    # {{ $key }}
+    listener {{ $value.host }} {{ $value.port }}
+    protocol {{ $value.protocol }}
+    {{- end }}
+    {{- end }}
+
 
 persistence:
   # -- Configure a persistent volume to place mosquitto data in.
@@ -49,3 +75,4 @@ persistence:
   configinc:
     enabled: false
     mountPath: /mosquitto/configinc
+

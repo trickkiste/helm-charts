@@ -9,13 +9,13 @@ keywords:
   - mosquitto
   - MQTT
   - eclipse-iot
-home: https://github.com/k8s-at-home/charts/tree/master/charts/stable/mosquitto
+home: https://github.com/trickkiste/helm-charts/tree/master/charts/stable/mosquitto
 icon: https://raw.githubusercontent.com/eclipse/mosquitto/master/logo/mosquitto-logo-min.svg
 sources:
   - https://github.com/eclipse/mosquitto
 maintainers:
-  - name: bjw-s
-    email: me@bjw-s.dev
+  - name: Markus Kienast
+    email: mark@trickkiste.at
 dependencies:
   - name: common
     repository: https://library-charts.k8s-at-home.com
