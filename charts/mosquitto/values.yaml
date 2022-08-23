@@ -24,11 +24,11 @@ service:
         port: 9001
         host: 0.0.0.0
         appProtocol: websockets
-      mqtt:
-        enabled: true
-        port: 1883
-        host: 0.0.0.0
-        appProtocol: mqtt
+#      mqtt:
+#        enabled: true
+#        port: 1883
+#        host: 0.0.0.0
+#        appProtocol: mqtt
 
 auth:
   # -- By enabling this, `allow_anonymous` gets set to `false` in the mosquitto config.

@@ -8,6 +8,7 @@ metadata:
     {{- include "common.labels" . | nindent 4 }}
 data:
   mosquitto.conf: |
+    auth_plugin /mosquitto/jwt_auth.so
     per_listener_settings {{ .Values.perListenerSettings }}
     {{- if .Values.auth.enabled }}
     allow_anonymous false
@@ -28,4 +29,3 @@ data:
     protocol {{ $value.appProtocol }}
     {{- end }}
     {{- end }}
-    plugin /mosquitto/config/libmosquitto_jwt_auth.so
