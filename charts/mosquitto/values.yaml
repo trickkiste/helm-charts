@@ -21,12 +21,12 @@ ports:
     enabled: true
     port: 9001
     host: 0.0.0.0
-    app-protocol: websockets
+    appProtocol: websockets
   mqtt:
     enabled: true
     port: 1883
     host: 0.0.0.0
-    app-protocol: mqtt
+    appProtocol: mqtt
 
 auth:
   # -- By enabling this, `allow_anonymous` gets set to `false` in the mosquitto config.
@@ -52,9 +52,9 @@ data:
     include_dir {{ .Values.persistence.configinc.mountPath }}
     {{- end }}
     {{- range $key, $value := .Values.ports }}
-    {{- $key }}: {{ $value }}
+    {{- if $value.enabled }}
     listener {{ $value.host }} {{ $value.port }}
-    protocol {{ $value.app-protocol }}
+    protocol {{ $value.appProtocol }}
     {{- end }}
     {{- end }}
     plugin /mosquitto/config/libmosquitto_jwt_auth.so
