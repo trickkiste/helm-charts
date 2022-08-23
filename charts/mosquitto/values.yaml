@@ -10,7 +10,7 @@ image:
   repository: trickkiste/eclipse-mosquitto-jwt
   # -- image tag
   # @default -- chart.appVersion
-  tag: 2
+  tag: "2"
   # -- image pull policy
   pullPolicy: IfNotPresent
 
@@ -22,13 +22,20 @@ service:
       http:
         enabled: true
         port: 9001
-        host: 0.0.0.0
-        appProtocol: websockets
-#      mqtt:
-#        enabled: true
-#        port: 1883
 #        host: 0.0.0.0
-#        appProtocol: mqtt
+        appProtocol: websockets
+      mqtt:
+        enabled: true
+        port: 1883
+#        host: 0.0.0.0
+        appProtocol: mqtt
+
+customConfigmap:
+  enabled: false
+  data:
+
+jwtAuth:
+  enabled: false
 
 auth:
   # -- By enabling this, `allow_anonymous` gets set to `false` in the mosquitto config.

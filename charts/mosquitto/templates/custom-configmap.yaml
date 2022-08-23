@@ -1,0 +1,15 @@
+{{- include "common.values.setup" . -}}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "common.names.fullname" . }}-custom-config
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+{{- if .Values.customConfigmap.enabled }}
+data:
+  {{- range $key, $val := .Values.customConfigmap.data }}
+  {{ $key }}: | 
+    {{- $val | nindent 4 }}
+  {{- end }}
+{{- end }}

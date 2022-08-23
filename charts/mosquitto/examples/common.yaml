@@ -16,15 +16,20 @@ volumeSpec:
 {{/* Append the configMap volume to the volumes */}}
 {{- define "mosquitto.customConfigVolume" -}}
 enabled: "true"
-mountPath: /mosquitto/configinc/custom.conf
-subPath: custom.conf
+mountPath: /mosquitto/configinc/{{ .key }}
+subPath: {{ .key }}
 type: "custom"
 volumeSpec:
   configMap:
-    name: {{ template "common.names.fullname" . }}-custom-config
+    name: {{- .name -}}-custom-config-{{- .key | replace "." "-" -}}
 {{- end -}}
 
-{{- $_ := set .Values.persistence "mosquitto-custom-config" (include "mosquitto.customConfigVolume" . | fromYaml) -}}
+{{- if .Values.customConfigmap.enabled }}
+{{- range $key, $val := .Values.customConfigmap.data }}
+{{ $data := dict "key" $key "val" $val "name" "mosquitto" }}
+{{- $_ := set .Values.persistence "mosquitto-custom1" (include "mosquitto.customConfigVolume" $data | fromYaml) -}}
+{{- end }}
+{{- end }}
 
 {{/* Render the templates */}}
 {{ include "common.all" . }}
