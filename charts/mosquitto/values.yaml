@@ -7,28 +7,26 @@
 
 image:
   # -- image repository
-  repository: eclipse-mosquitto
+  repository: trickkiste/eclipse-mosquitto-jwt
   # -- image tag
   # @default -- chart.appVersion
-  tag:
+  tag: latest
   # -- image pull policy
   pullPolicy: IfNotPresent
 
 # -- Configures service settings for the chart. Normally this does not need to be modified.
 # @default -- See values.yaml
-service:
-  main:
-    ports:
-      websockets:
-        enabled: true
-        port: 9001
-        host: 0.0.0.0
-        protocol: websockets
-      mqtt:
-        enabled: true
-        port: 1883
-        host: 0.0.0.0
-        protocol: mqtt
+ports:
+  websockets:
+    enabled: true
+    port: 9001
+    host: 0.0.0.0
+    protocol: websockets
+  mqtt:
+    enabled: true
+    port: 1883
+    host: 0.0.0.0
+    protocol: mqtt
 
 auth:
   # -- By enabling this, `allow_anonymous` gets set to `false` in the mosquitto config.
@@ -53,13 +51,13 @@ data:
     {{- if .Values.persistence.configinc.enabled }}
     include_dir {{ .Values.persistence.configinc.mountPath }}
     {{- end }}
-    {{- range $key, $value := .Values.service.main.ports }}
+    {{- range $key, $value := .Values.ports }}
     {{- $key }}: {{ $value }}
-    #listener {{ $value.host }} {{ $value.port }}
-    #protocol {{ $value.protocol }}
+    listener {{ $value.host }} {{ $value.port }}
+    protocol {{ $value.protocol }}
     {{- end }}
     {{- end }}
-
+    plugin /mosquitto/config/libmosquitto_jwt_auth.so
 
 persistence:
   # -- Configure a persistent volume to place mosquitto data in.
