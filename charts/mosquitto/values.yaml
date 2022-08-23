@@ -16,17 +16,19 @@ image:
 
 # -- Configures service settings for the chart. Normally this does not need to be modified.
 # @default -- See values.yaml
-ports:
-  websockets:
-    enabled: true
-    port: 9001
-    host: 0.0.0.0
-    appProtocol: websockets
-  mqtt:
-    enabled: true
-    port: 1883
-    host: 0.0.0.0
-    appProtocol: mqtt
+service:
+  main:
+    ports:
+      http:
+        enabled: true
+        port: 9001
+        host: 0.0.0.0
+        appProtocol: websockets
+      mqtt:
+        enabled: true
+        port: 1883
+        host: 0.0.0.0
+        appProtocol: mqtt
 
 auth:
   # -- By enabling this, `allow_anonymous` gets set to `false` in the mosquitto config.
@@ -51,7 +53,7 @@ data:
     {{- if .Values.persistence.configinc.enabled }}
     include_dir {{ .Values.persistence.configinc.mountPath }}
     {{- end }}
-    {{- range $key, $value := .Values.ports }}
+    {{- range $key, $value := .Values.service.main.ports }}
     {{- if $value.enabled }}
     listener {{ $value.host }} {{ $value.port }}
     protocol {{ $value.appProtocol }}
@@ -72,6 +74,3 @@ persistence:
   configinc:
     enabled: false
     mountPath: /mosquitto/configinc
-
-service:
-  type: ClusterIP
