@@ -1,0 +1,92 @@
+#
+# IMPORTANT NOTE
+#
+# This chart inherits from our common library chart. You can check the default values/options here:
+# https://github.com/k8s-at-home/library-charts/tree/main/charts/stable/common/values.yaml
+#
+
+image:
+  # -- image repository
+  repository: trickkiste/eclipse-mosquitto-jwt
+  # -- image tag
+  # @default -- chart.appVersion
+  tag: latest
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+
+
+# FIXME: custom-configmap.yaml template supports multiple files but common.yaml is unable to create
+# the corresponding volumes and mount points.
+customConfigmap:
+  enabled: true
+  data:
+    custom.conf: |
+      allow_zero_length_clientid true
+      max_keepalive 15
+
+# -- Configures service settings for the chart. Normally this does not need to be modified.
+# @default -- See values.yaml
+service:
+  main:
+    ports:
+      http:
+        enabled: true
+        port: 9001
+#        host:
+        appProtocol: websockets
+#      mqtt:
+#        enabled: true
+#        port: 1883
+#        host:
+#        appProtocol: mqtt
+
+auth:
+  # -- By enabling this, `allow_anonymous` gets set to `false` in the mosquitto config.
+  enabled: false
+
+# -- By enabling this, authentication and access control settings will be controlled on a per-listener basis
+perListenerSettings: false
+
+persistence:
+#  mosquitto-clientid:
+#    enabled: true
+#    mountPath: "/mosquitto/configinc/bogus.conf"
+#    subPath: "bogus.conf"
+#    accessMode: "ReadWriteOnce"
+#    #type: "custom"
+
+  # -- Configure a persistent volume to place mosquitto data in.
+  # When enabled, this enables `persistence` and `persistence_location` in the mosquitto config.
+  # @default -- See values.yaml
+  data:
+    enabled: false
+    mountPath: /mosquitto/data
+  # -- Configure a persistent volume to place *.conf mosquitto-config-files in.
+  # When enabled, this gets set as `include_dir` in the mosquitto config.
+  # @default -- See values.yaml
+  configinc:
+    enabled: false
+    mountPath: /mosquitto/configinc
+
+ingress:
+  main:
+    enabled: true
+    className: "public"
+#    annotations:
+#      cert-manager.io/issuer: letsencrypt-staging
+#    tls:
+#      - secretName: mqtt.example.com-tls
+#        hosts:
+#          - mqtt.example.com
+    hosts:
+      - host: mqtt.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+
+#persistence:
+#  config:
+#    enabled: true
+#    accessMode: ReadWriteOnce
+#    size: 1Gi
+
