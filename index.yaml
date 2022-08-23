@@ -4,6 +4,46 @@ entries:
   - annotations:
       artifacthub.io/changes: |-
         - kind: changed
+          description: revert to common library
+        - kind: changed
+          description: ports[x].enabled check
+        - kind: changed
+          description: if .Values.service.annotations
+        - kind: changed
+          description: _helpers.tpl
+        - kind: changed
+          description: service.yaml
+        - kind: changed
+          description: plugin libmosquitto_jwt_auth.so
+    apiVersion: v2
+    appVersion: 2.0.14
+    created: "2022-08-23T14:34:33.880398837Z"
+    dependencies:
+    - name: common
+      repository: https://library-charts.k8s-at-home.com
+      version: 4.5.2
+    description: Eclipse Mosquitto - An open source MQTT broker
+    digest: c4beed69b3d6722163a053299353ca75b3c836b7d8d7de1619f053cac672c352
+    home: https://github.com/trickkiste/helm-charts/tree/main/charts/mosquitto
+    icon: https://raw.githubusercontent.com/eclipse/mosquitto/master/logo/mosquitto-logo-min.svg
+    keywords:
+    - mosquitto
+    - MQTT
+    - eclipse-iot
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: mark@trickkiste.at
+      name: Markus Kienast
+    name: mosquitto
+    sources:
+    - https://github.com/eclipse/mosquitto
+    - https://github.com/trickkiste/helm-charts/tree/main/chart/mosquitto
+    urls:
+    - https://github.com/trickkiste/helm-charts/releases/download/mosquitto-1.0.11/mosquitto-1.0.11.tgz
+    version: 1.0.11
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
           description: ports[x].enabled check
         - kind: changed
           description: if .Values.service.annotations
