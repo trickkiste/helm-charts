@@ -10,7 +10,7 @@ image:
   repository: trickkiste/eclipse-mosquitto-jwt
   # -- image tag
   # @default -- chart.appVersion
-  tag: latest
+  tag: 2
   # -- image pull policy
   pullPolicy: IfNotPresent
 
