@@ -6,3 +6,26 @@ metadata:
   name: {{ template "common.names.fullname" . }}-config
   labels:
     {{- include "common.labels" . | nindent 4 }}
+data:
+  mosquitto.conf: |
+    per_listener_settings {{ .Values.perListenerSettings }}
+    {{- if .Values.auth.enabled }}
+    allow_anonymous false
+    {{- else }}
+    allow_anonymous true
+    {{- end }}
+    {{- if .Values.persistence.data.enabled }}
+    persistence true
+    persistence_location {{ .Values.persistence.data.mountPath }}
+    autosave_interval 1800
+    {{- end }}
+    {{- if .Values.persistence.configinc.enabled }}
+    include_dir {{ .Values.persistence.configinc.mountPath }}
+    {{- end }}
+    {{- range $key, $value := .Values.service.main.ports }}
+    {{- if $value.enabled }}
+    listener {{ $value.host }} {{ $value.port }}
+    protocol {{ $value.appProtocol }}
+    {{- end }}
+    {{- end }}
+    plugin /mosquitto/config/libmosquitto_jwt_auth.so

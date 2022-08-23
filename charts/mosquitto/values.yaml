@@ -37,29 +37,29 @@ auth:
 # -- By enabling this, authentication and access control settings will be controlled on a per-listener basis
 perListenerSettings: false
 
-data:
-  mosquitto.conf: |
-    per_listener_settings {{ .Values.perListenerSettings }}
-    {{- if .Values.auth.enabled }}
-    allow_anonymous false
-    {{- else }}
-    allow_anonymous true
-    {{- end }}
-    {{- if .Values.persistence.data.enabled }}
-    persistence true
-    persistence_location {{ .Values.persistence.data.mountPath }}
-    autosave_interval 1800
-    {{- end }}
-    {{- if .Values.persistence.configinc.enabled }}
-    include_dir {{ .Values.persistence.configinc.mountPath }}
-    {{- end }}
-    {{- range $key, $value := .Values.service.main.ports }}
-    {{- if $value.enabled }}
-    listener {{ $value.host }} {{ $value.port }}
-    protocol {{ $value.appProtocol }}
-    {{- end }}
-    {{- end }}
-    plugin /mosquitto/config/libmosquitto_jwt_auth.so
+#data:
+#  mosquitto.conf: |
+#    per_listener_settings {{ .Values.perListenerSettings }}
+#    {{- if .Values.auth.enabled }}
+#    allow_anonymous false
+#    {{- else }}
+#    allow_anonymous true
+#    {{- end }}
+#    {{- if .Values.persistence.data.enabled }}
+#    persistence true
+#    persistence_location {{ .Values.persistence.data.mountPath }}
+#    autosave_interval 1800
+#    {{- end }}
+#    {{- if .Values.persistence.configinc.enabled }}
+#    include_dir {{ .Values.persistence.configinc.mountPath }}
+#    {{- end }}
+#    {{- range $key, $value := .Values.service.main.ports }}
+#    {{- if $value.enabled }}
+#    listener {{ $value.host }} {{ $value.port }}
+#    protocol {{ $value.appProtocol }}
+#    {{- end }}
+#    {{- end }}
+#    plugin /mosquitto/config/libmosquitto_jwt_auth.so
 
 persistence:
   # -- Configure a persistent volume to place mosquitto data in.
