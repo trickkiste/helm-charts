@@ -24,11 +24,15 @@ service:
         port: 9001
 #        host: 0.0.0.0
         appProtocol: websockets
+        configOptions: ""
+        
       mqtt:
         enabled: true
         port: 1883
 #        host: 0.0.0.0
         appProtocol: mqtt
+        configOptions: ""
+        
 
 customConfigmap:
   enabled: false

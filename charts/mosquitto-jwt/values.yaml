@@ -19,19 +19,55 @@ serviceAccount:
 
 service:
   type: ClusterIP
-  externalTrafficPolicy: Cluster
+  externalTrafficPolicy:
   annotations: {}
     # metallb.universe.tf/allow-shared-ip: pi-hole
 
+ingress:
+  enabled: false
+  annotations: {}
+    #cert-manager.io/cluster-issuer: letsencrypt-cluster-prod
+    #kubernetes.io/ingress.class: public
+  hosts:
+    - host: ""
+      path: /
+      port: 9001
+    #- host: mqttjwt.example.com
+    #  path: /
+    #  port: 9002
+  tls:
+    - secretName: mqtt.example.com-tls
+      hosts:
+        - mqtt.example.com
+    #- secretName: mqttjwt.example.com-tls
+    #  hosts:
+    #    - mqttjwt.example.com
+
 ports:
+  websocket:
+    port: 9001
+    protocol: TCP
+    appProtocol: websockets
+    configOptions: ""
+#  jwt:
+#    port: 9002
+#    protocol: TCP
+#    appProtocol: websockets
+#    configOptions: |-
+#      auth_plugin /mosquitto/jwt_auth.so
+#      auth_opt_jwt_alg RS256
+#      auth_opt_jwt_jwks_file /mosquitto/jwks.json
+#      #auth_opt_jwt_sec_base64 d1ZRNkFLaXlUbjJsR0R6aTBtaE9qVXlKSDBWNE9XczZBNGg4WklBZG1sekNIc1ZRNTJRdk1JWXp6WFFHTjVjUmxwTnVmMUhDTjdwcFp6azBaQ3c5ZFlVbjBDMExYTnRlMkkxeVBtRE1JWS1rUDZoUXZTaVo4VXp2b3piSGRrMmRNOWo4NkZScWdRR3F3RThmX25TRTZLSWJ3d3A1angwckZkUzV4amphWUVENlJFM3U3SEdKY0IzSUhnWGFZdm56N1h3TkZ6azF5VlZhVUR4TWdveXBubDFzWXBQcFdpa2Rya0VLRDVsS1U5cmw5aXQ2NGpXa0NiWGk4Qm5hUFZiQlQ0VzIxelBuS2hKUVpnZENjYkZyYXlJQnVNM1R1M2l4cjR1YUNoUV94YmNYLXJVRktGNWt6X0QySjQzb3dSSHhmM2xfTllOSWd5NVhJcjI2TE1vMmN3
+#      auth_opt_jwt_validate_exp true
+#      auth_opt_jwt_validate_sub_match_username true
+#      allow_anonymous false
   mqtt:
     port: 1883
     # sets consistent nodePort, required to set service.type=NodePort
     # nodePort: 31883
     protocol: TCP
-  websocket:
-    port: 9090
-    protocol: TCP
+    appProtocol: mqtt
+    configOptions: ""
 
 persistence:
   enabled: true
@@ -83,14 +119,16 @@ authentication:
   # passwordEntries: |-
   #   user1:$6$BKzw0RKerxV4Esbj$Uz5slWGB1TiOtYIEokEl0eR1YSEQAdKpcdRYMsLYbwjktlVzdLyGk41YCPGyMLnBePtdwPhkcm8kjGI0R9s57w==
   #   user2:$6$b5vYuHrSLj48Ii32$NjlbnatIaUQSsNvxxTpawpav6NPyZ8QhGrdEVGtyU1rgEGjNzVGKlstRg29FV6MFTPs/ugPA8D5I5+qRcIMXSg==
-  passwordFilePath: "/etc/mosquitto/passwordfile"
+  passwordFilePath: "/mosquitto/config/passwordfile"
 
 authorization:
+  aclfilePath: "/mosquitto/config/aclfile"
   acls: ""
   # To use authorizations with mosquitto, you can set a list of per user or pattern-based rules.
   # reference https://mosquitto.org/man/mosquitto-conf-5.html for further information.
   # For example:
   # acls: |-
+      #  topic readwrite #
       # zigbee2mqtt ACLs
       # user zigbee2mqtt
       # topic readwrite zigbee2mqtt/#
@@ -99,28 +137,27 @@ authorization:
       # pattern read cmnd/%u/#
       # pattern write stat/%u/#
       # pattern write tele/%u/#
-  aclfilePath: "/etc/mosquitto/aclfile"
 
 existingConfigMap: ""
-config: |
+config: |-
+  per_listener_settings true
   persistence true
   persistence_location /mosquitto/data/
   log_dest stdout
-  listener 1883
-  listener 9090
-  protocol websockets
+  #allow_zero_length_clientid true
+  #max_keepalive 15
 
 ## Additional volumes.
 extraVolumes: []
-  # - name: tls
-  #   secret:
-  #     secretName: mosquitto-certs
+  #- name: jwks
+  #  secret:
+  #    secretName: steadiq-mosquitto
 
 ## Additional volumeMounts to the main container.
 extraVolumeMounts: []
-  # - name: tls
-  #   mountPath: /certs
-  #   subPath: cafile
+  #- name: jwks
+  #  mountPath: /mosquitto/jwks.json
+  #  subPath: jwks.json
 
 monitoring:
   podMonitor:

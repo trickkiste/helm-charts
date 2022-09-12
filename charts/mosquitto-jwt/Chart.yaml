@@ -1,0 +1,23 @@
+apiVersion: v2
+appVersion: 2.0.14
+description: Eclipse Mosquitto is an open source message broker which implements MQTT version 5, 3.1.1 and 3.1
+name: mosquitto-jwt
+version: 2.5.0
+kubeVersion: ">=1.16.0-0"
+keywords:
+  - mosquitto
+  - MQTT
+  - eclipse-iot
+home: https://github.com/trickkiste/helm-charts/tree/main/charts/mosquitto-jwt
+icon: https://raw.githubusercontent.com/eclipse/mosquitto/master/logo/mosquitto-logo-min.svg
+sources:
+  - https://github.com/eclipse/mosquitto
+  - https://github.com/trickkiste/helm-charts/tree/main/chart/mosquitto-jwt
+maintainers:
+  - name: Markus Kienast
+    email: mark@trickkiste.at
+annotations:
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: supporting per listener configuration
+

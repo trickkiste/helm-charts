@@ -1,0 +1,17 @@
+{{- if not .Values.existingConfigMap -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mosquitto.fullname" . }}
+  labels: {{- include "mosquitto.labels" . | nindent 4 }}
+data:
+  mosquitto.conf: |-
+    {{- .Values.config | nindent 4 }}
+    {{- with .Values.ports }}
+      {{- range $key, $value := . }}
+    listener {{ $value.port }}
+    protocol {{ $value.appProtocol }}
+    {{- $value.configOptions | nindent 4 }}
+      {{- end }}
+    {{- end }}
+{{- end }}
